@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import dummyData from "../dummyData";
+import Card from "./Card";
 
 const Main = () => {
   const [data, setData] = useState(dummyData);
@@ -17,6 +18,29 @@ const Main = () => {
                 {...provided.droppableProps}
               >
                 <div className="trello-section-title">{section.title}</div>
+                <div className="trello-section-content">
+                  {section.tasks.map((task, index) => (
+                    <Draggable
+                      draggableId={task.id}
+                      index={index}
+                      key={task.id}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={{
+                            ...provided.draggableProps.style,
+                            opacity: snapshot.isDragging ? "0.3" : "1",
+                          }}
+                        >
+                          <Card>{task.title}</Card>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                </div>
               </div>
             )}
           </Droppable>
