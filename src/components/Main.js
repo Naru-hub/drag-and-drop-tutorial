@@ -40,6 +40,7 @@ const Main = () => {
                       )}
                     </Draggable>
                   ))}
+                  {provided.placeholder}
                 </div>
               </div>
             )}
