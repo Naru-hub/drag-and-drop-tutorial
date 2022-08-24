@@ -9,20 +9,41 @@ const Main = () => {
   const onDragEnd = (result) => {
     const { source, destination } = result;
 
-    // 同じカラム内でのタスクの入れ替え
-    const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
-    console.log(sourceColIndex);
-    const sourceCol = data[sourceColIndex];
-    console.log(sourceCol);
+    // 別のカラムにタスクを移動したとき
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
+      const destinationColIndex = data.findIndex(
+        (e) => e.id === destination.droppableId
+      );
+      const sourceCol = data[sourceColIndex];
+      const destinationCol = data[destinationColIndex];
 
-    const sourceTask = [...sourceCol.tasks];
-    // 元の位置にあったタスクを削除
-    const [removed] = sourceTask.splice(source.index, 1);
-    // 移動する位置にタスクを追加
-    sourceTask.splice(destination.index, 0, removed);
+      const sourceTask = [...sourceCol.tasks];
+      const destinationTask = [...destinationCol.tasks];
 
-    data[sourceColIndex].tasks = sourceTask;
-    setData(data);
+      // 元の位置にあったタスクを削除
+      const [removed] = sourceTask.splice(source.index, 1);
+      // 移動する位置のカラムにタスクを追加
+      destinationTask.splice(destination.index, 0, removed);
+
+      data[sourceColIndex].tasks = sourceTask;
+      data[destinationColIndex].tasks = destinationTask;
+
+      setData(data);
+    } else {
+      // 同じカラム内でのタスクの入れ替え
+      const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
+      const sourceCol = data[sourceColIndex];
+
+      const sourceTask = [...sourceCol.tasks];
+      // 元の位置にあったタスクを削除
+      const [removed] = sourceTask.splice(source.index, 1);
+      // 移動する位置にタスクを追加
+      sourceTask.splice(destination.index, 0, removed);
+
+      data[sourceColIndex].tasks = sourceTask;
+      setData(data);
+    }
   };
 
   return (
